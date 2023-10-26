@@ -1,0 +1,13 @@
+{
+	"geode": "1.4.0",
+	"version": "v1.0.0",
+	"id": "cvolton.lists",
+	"name": "Lists",
+	"developer": "Cvolton",
+	"description": "dos punto dos",
+    "resources": {
+        "sprites": [
+            "resources/*.png"
+        ]
+    }
+}
