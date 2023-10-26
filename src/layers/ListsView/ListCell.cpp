@@ -1,4 +1,6 @@
 #include "ListCell.h"
+#include "../ListInfoLayer.h"
+#include "../../utils.hpp"
 
 CCMenuItemSpriteExtra* ListCell::createButton(CCNode* menu, const char* text, cocos2d::SEL_MenuHandler handler, float x, float y, float width, float height, float scale){
     auto buttonSprite = ButtonSprite::create(text, width, true, "bigFont.fnt", "GJ_button_01.png", height, scale);
@@ -12,13 +14,6 @@ CCMenuItemSpriteExtra* ListCell::createButton(CCNode* menu, const char* text, co
     menu->addChild(buttonButton);
 
     return buttonButton;
-}
-
-std::string getDifficultyIcon(int diff){
-    if(diff == -1) return "difficulty_00_btn_001.png";
-    if(diff == 0) return "difficulty_auto_btn_001.png";
-    if(diff <= 10) return fmt::format("difficulty_{:02}_btn_001.png", diff);
-    return "difficulty_01_btn_001.png";
 }
 
 void ListCell::loadFromWrapper(CCNode* wrapper) {
@@ -252,8 +247,9 @@ ListCell* ListCell::create(const char* key, CCSize size) {
 }
 
 void ListCell::onView(CCObject* sender){
-    auto searchObject = GJSearchObject::create(SearchType::ListsOnClick, m_list.m_levels);
-    auto browserLayer = LevelBrowserLayer::scene(searchObject);
+    //auto searchObject = GJSearchObject::create(SearchType::ListsOnClick, m_list.m_levels);
+    //auto browserLayer = LevelBrowserLayer::scene(searchObject);
+    auto browserLayer = ListInfoLayer::scene(m_list);
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
 
