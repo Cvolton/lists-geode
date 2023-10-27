@@ -144,6 +144,7 @@ bool ListInfoLayer::init(List list) {
     addChild(likesText);
 
     renderList();
+    setupProgressBars();
     loadList();
 
     setKeypadEnabled(true);
@@ -169,6 +170,45 @@ void ListInfoLayer::loadList() {
     auto GLM = GameLevelManager::sharedState();
     GLM->m_onlineListDelegate = this;
     GLM->getOnlineLevels(GJSearchObject::create((SearchType) 26, m_list.m_levels));
+}
+
+void ListInfoLayer::setupProgressBars() {
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
+    auto levelVector = m_list.getLevelIDs();
+    auto completedVector = m_list.getCompletedLevelIDs();
+
+    //progress bar
+    auto bar = CCSprite::create("GJ_progressBar_001.png");
+    bar->setScale(0.7f);
+    bar->setPosition({winSize.width / 2, 12});
+    bar->setColor({0, 0, 0});
+    bar->setOpacity(125);
+    bar->setZOrder(1);
+
+    addChild(bar);
+
+    float size = (float) completedVector.size() / (float) levelVector.size();
+
+    auto status = CCLabelBMFont::create(fmt::format("{}/{}", completedVector.size(), levelVector.size()).c_str(), "bigFont.fnt");
+    status->setPosition({winSize.width / 2, 13});
+    status->limitLabelWidth(170, .7f, .3f);
+    status->setScale(0.5f);
+    status->setZOrder(2);
+    addChild(status);
+
+    auto progress = CCSprite::create("GJ_progressBar_001.png");
+    progress->setColor({0x47,0xaa,0xe8});
+    //progress->setColor({0,255,0});
+    progress->setScaleX(0.92f);
+    progress->setScaleY(0.860f);
+    progress->setOpacity(255);
+    bar->addChild(progress);
+    progress->setAnchorPoint({0.f,0.5f});
+    progress->setPosition({2.5f, 10.f});
+
+    CCRect progressRect = progress->getTextureRect();
+    progressRect.size.width *= size;
+    progress->setTextureRect(progressRect);
 }
 
 void ListInfoLayer::keyBackClicked() {

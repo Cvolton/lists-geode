@@ -16,6 +16,7 @@ protected:
     virtual bool init(List list);
     void renderList();
     void loadList();
+    void setupProgressBars();
     virtual void keyBackClicked();
     void onBack(cocos2d::CCObject*);
 public:
