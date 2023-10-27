@@ -136,7 +136,6 @@ void ListsViewLayer::loadLists() {
     renderList();
 
     m_circle = LoadingCircle::create();
-    m_circle->retain();
     m_circle->setParentLayer(this);
     m_circle->show();
 

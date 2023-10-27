@@ -78,7 +78,7 @@ bool ListInfoLayer::init(List list) {
     auto refreshBtn = CCMenuItemSpriteExtra::create(
         refreshSprite,
         this,
-        menu_selector(ListInfoLayer::onBack)
+        menu_selector(ListInfoLayer::onRefresh)
     );
     refreshBtn->setPosition({+ (winSize.width / 2) - 26, + (winSize.height / 2) - 26});
     menu->addChild(refreshBtn);
@@ -88,7 +88,7 @@ bool ListInfoLayer::init(List list) {
     auto infoBtn = CCMenuItemSpriteExtra::create(
         infoSprite,
         this,
-        menu_selector(ListInfoLayer::onBack)
+        menu_selector(ListInfoLayer::onInfo)
     );
     infoBtn->setPosition({+ (winSize.width / 2) - 26, + (winSize.height / 2) - 71});
     menu->addChild(infoBtn);
@@ -98,7 +98,7 @@ bool ListInfoLayer::init(List list) {
     auto likeBtn = CCMenuItemSpriteExtra::create(
         likeSprite,
         this,
-        menu_selector(ListInfoLayer::onBack)
+        menu_selector(ListInfoLayer::onLike)
     );
     likeBtn->setPosition({+ (winSize.width / 2) - 26, + (winSize.height / 2) - 116});
     menu->addChild(likeBtn);
@@ -109,6 +109,10 @@ bool ListInfoLayer::init(List list) {
     diffSprite->setScale(0.8f);
     diffSprite->setZOrder(1);
     addChild(diffSprite);
+
+    /*CCRect diffSpriteRect = diffSprite->getTextureRect();
+    diffSpriteRect.size.height -= 12;
+    diffSprite->setTextureRect(diffSpriteRect);*/
 
     auto title = CCLabelBMFont::create(m_list.m_name.c_str(), "bigFont.fnt");
     title->setAnchorPoint({ 0.0f, .5f });
@@ -160,6 +164,11 @@ void ListInfoLayer::renderList() {
         m_levels->retain();
     }
 
+    if(m_circle) {
+        m_circle->fadeAndRemove();
+        m_circle = nullptr;
+    }
+
     m_listView = CustomListView::create(m_levels, BoomListType::Level, 220.f, 356.f);
     m_listLayer = GJListLayer::create(m_listView, nullptr, {191, 114, 62, 255}, 356.f, 220.f);
     m_listLayer->setPosition(winSize / 2 - m_listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
@@ -170,6 +179,10 @@ void ListInfoLayer::loadList() {
     auto GLM = GameLevelManager::sharedState();
     GLM->m_onlineListDelegate = this;
     GLM->getOnlineLevels(GJSearchObject::create((SearchType) 26, m_list.m_levels));
+
+    m_circle = LoadingCircle::create();
+    m_circle->setParentLayer(this);
+    m_circle->show();
 }
 
 void ListInfoLayer::setupProgressBars() {
@@ -217,6 +230,18 @@ void ListInfoLayer::keyBackClicked() {
 
 void ListInfoLayer::onBack(CCObject* listect) {
     keyBackClicked();
+}
+
+void ListInfoLayer::onRefresh(CCObject* listect) {
+    loadList();
+}
+
+void ListInfoLayer::onInfo(CCObject* listect) {
+    
+}
+
+void ListInfoLayer::onLike(CCObject* listect) {
+    LikeItemLayer::create((LikeItemType) 4, m_list.m_id, 0)->show();
 }
 
 CCScene* ListInfoLayer::scene(List list) {
