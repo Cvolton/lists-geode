@@ -27,6 +27,9 @@ class $modify(ListsCreatorLayer, CreatorLayer) {
 	    listsBtn->setSizeMult(1.2f);
 	    listsBtn->setID("lists"_spr);
 
+		listsBtn->setContentSize({88.825f, 88.825f});
+		listsSprite->setPosition(listsBtn->getContentSize() / 2);
+
 		auto menu = this->getChildByID("creator-buttons-menu");
         menu->addChild(listsBtn);
         menu->updateLayout();
