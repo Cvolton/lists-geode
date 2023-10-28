@@ -1,4 +1,5 @@
 #include "ListInfoLayer.h"
+#include "ListInfo/ExtendedListInfo.h"
 #include "../utils.hpp"
 
 #include <Geode/utils/web.hpp>
@@ -237,7 +238,7 @@ void ListInfoLayer::onRefresh(CCObject* listect) {
 }
 
 void ListInfoLayer::onInfo(CCObject* listect) {
-    
+    ExtendedListInfo::create(m_list)->show();
 }
 
 void ListInfoLayer::onLike(CCObject* listect) {

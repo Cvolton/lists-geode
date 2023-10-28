@@ -20,4 +20,5 @@ struct List {
 
 	std::vector<int> getLevelIDs() const;
 	std::vector<int> getCompletedLevelIDs() const;
+	std::string getDescription() const;
 };

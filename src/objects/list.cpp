@@ -48,3 +48,7 @@ std::vector<int> List::getCompletedLevelIDs() const {
 	}
 	return vectorCopy;
 }
+
+std::string List::getDescription() const {
+	return LevelTools::base64DecodeString(m_desc);
+}
