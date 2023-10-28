@@ -5,7 +5,11 @@
 using namespace geode::prelude;
 
 class ListsSearchLayer : public cocos2d::CCLayer {
+    CCMenu* m_menu = nullptr;
+    CCTextInputNode* m_textNode = nullptr;
+
 protected:
+    CCMenuItemSpriteExtra* createButton(const char* texture, const char* text, const char* icon, int searchType, float size = 0.4f);
     virtual bool init();
     virtual void keyBackClicked();
     void loadLists();
