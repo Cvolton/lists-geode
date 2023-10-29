@@ -176,6 +176,8 @@ void ListsViewLayer::renderList() {
 
     if(m_listLayer != nullptr) m_listLayer->removeFromParentAndCleanup(true);
 
+    m_nextBtn->setVisible(m_lists.size() > 0);
+
     CCArray* displayedLevels = CCArray::create();
     for(auto& list : m_lists) {
         log::info("Adding list: {}", list.m_name);
