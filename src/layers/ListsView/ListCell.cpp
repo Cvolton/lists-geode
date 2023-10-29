@@ -107,10 +107,10 @@ void ListCell::loadFromWrapper(CCNode* wrapper) {
     number->setScale(.325f);
     this->m_mainLayer->addChild(number);
 
-    auto diamondSprite = CCSprite::createWithSpriteFrameName("GJ_sLikeIcon_001.png");
-    diamondSprite->setPosition({number->getPositionX() + ((number->getContentSize().width) * number->getScaleX()) + 5, 9});
+    auto diamondSprite = CCSprite::createWithSpriteFrameName(m_list.m_likes < 0 ? "GJ_dislikesIcon_001.png" : "GJ_likesIcon_001.png");
+    diamondSprite->setPosition({number->getPositionX() + ((number->getContentSize().width) * number->getScaleX()) + 5, 10});
     diamondSprite->setAnchorPoint({0, 0.5f});
-    diamondSprite->setScale(0.7f);
+    diamondSprite->setScale(0.45f);
     this->m_mainLayer->addChild(diamondSprite);
 
     auto diamond = CCLabelBMFont::create(std::to_string(m_list.m_likes).c_str(), "bigFont.fnt");
