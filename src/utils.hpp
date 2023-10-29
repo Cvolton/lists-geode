@@ -2,10 +2,17 @@
 #include <string>
 
 inline std::string getDifficultyIcon(int diff){
+    if(diff == -2) return getDifficultyIcon(6);
     if(diff == -1) return "difficulty_00_btn_001.png";
-    if(diff == 0) return "difficulty_auto_btn_001.png";
+    if(diff == 0 || diff == -3) return "difficulty_auto_btn_001.png";
     if(diff <= 10) return fmt::format("difficulty_{:02}_btn_001.png", diff);
-    return "difficulty_01_btn_001.png";
+    return getDifficultyIcon(0);
+}
+
+inline std::string getDemonDifficultyIcon(int diff){
+    if(diff <= 5) return getDifficultyIcon(diff);
+    if(diff <= 10) return fmt::format("difficulty_{:02}_btn2_001.png", diff);
+    return getDemonDifficultyIcon(0);
 }
 
 inline std::string fixColorCrashes(std::string input) {

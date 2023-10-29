@@ -174,6 +174,21 @@ bool ListsSearchLayer::init() {
     
 }
 
+CCMenuItemSpriteExtra* ListsSearchLayer::createDiffButton(int i) {
+    auto diffSprite = CCSprite::createWithSpriteFrameName(getDemonDifficultyIcon(i).c_str());
+    diffSprite->setScale(.8f);
+    auto diffBtn = CCMenuItemSpriteExtra::create(
+        diffSprite,
+        this,
+        menu_selector(ListsSearchLayer::onDifficulty)
+    );
+    diffBtn->setTag(i);
+    diffBtn->setContentSize({diffBtn->getContentSize().width, diffBtn->getContentSize().height > 40.f ? 40.0f : diffBtn->getContentSize().height});
+    if(m_diff != i) diffBtn->setColor({125,125,125});
+    m_filterMenu->addChild(diffBtn);
+    return diffBtn;
+}
+
 void ListsSearchLayer::renderFilters() {
     if(m_filterMenu) m_filterMenu->removeFromParentAndCleanup(true);
 
@@ -182,16 +197,15 @@ void ListsSearchLayer::renderFilters() {
     //difficulties
     m_filterMenu = CCMenu::create();
     for(int i = -1; i <= 10; i++) {
-        auto diffSprite = CCSprite::createWithSpriteFrameName(getDifficultyIcon(i).c_str());
-        diffSprite->setScale(.8f);
-        auto diffBtn = CCMenuItemSpriteExtra::create(
-            diffSprite,
-            this,
-            menu_selector(ListsSearchLayer::onDifficulty)
-        );
-        diffBtn->setTag(i);
-        if(m_diff != i) diffBtn->setColor({125,125,125});
-        m_filterMenu->addChild(diffBtn);
+        if(i == 0 || i == 6) continue;
+        auto btn = createDiffButton(i != 0 ? i : -3);
+
+        if(i == 5) {
+            createDiffButton(-2);
+            createDiffButton(-3);
+        }
+
+        if(i == 8) createDiffButton(6);
     }
 
     m_filterMenu->setContentSize({342,89});
@@ -211,7 +225,7 @@ void ListsSearchLayer::onBack(CCObject* object) {
 }
 
 void ListsSearchLayer::onDifficulty(CCObject* object) {
-    if(m_diff == object->getTag()) m_diff = -2;
+    if(m_diff == object->getTag()) m_diff = -4;
     else m_diff = object->getTag();
 
     renderFilters();
@@ -221,6 +235,7 @@ void ListsSearchLayer::onSearch(CCObject* object) {
     ListSearchObject obj;
     obj.m_type = object->getTag();
     if(obj.m_type == 0 || obj.m_type == 5) obj.m_str = m_textNode->getString();
+    if(m_diff != -4) obj.m_diff = m_diff;
 
     auto browserLayer = ListsViewLayer::scene(obj);
 
