@@ -1,6 +1,7 @@
 #include "ListsSearchLayer.h"
 #include "ListsViewLayer.h"
 #include "../objects/ListSearchObject.hpp"
+#include "../utils.hpp"
 
 ListsSearchLayer* ListsSearchLayer::create() {
     auto ret = new ListsSearchLayer();
@@ -58,13 +59,16 @@ bool ListsSearchLayer::init() {
 
     m_menu = CCMenu::create();
     m_menu->setID("search-menu"_spr);
+    m_menu->setPosition({winSize.width / 2, (winSize.height / 2)});
     addChild(m_menu);
 
     //quick search
+    const float btnOffset = 0.f;
+
     auto quickBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
     quickBg->setContentSize({365,115});
     quickBg->setColor({0,46,117});
-    quickBg->setPosition({winSize.width / 2, (winSize.height / 2) + 28});
+    quickBg->setPosition({winSize.width / 2, (winSize.height / 2) + 28 + btnOffset});
     quickBg->setID("quick-search-bg"_spr);
     addChild(quickBg, -1);
 
@@ -72,45 +76,32 @@ bool ListsSearchLayer::init() {
     quickTitle->setPosition((winSize.width / 2), (winSize.height / 2) + 97);
     quickTitle->setScale(.5f);
     quickTitle->setID("quick-title"_spr);
+    //quickTitle->setVisible(false);
     addChild(quickTitle);
 
     auto downloadBtn = createButton("GJ_longBtn03_001.png", "Most Downloaded", "GJ_sDownloadIcon_001.png", 1);
-    downloadBtn->setPosition({-90.5f, 64.f});
+    downloadBtn->setPosition({-90.5f, 64.f + btnOffset});
     downloadBtn->setID("most-downloaded"_spr);
 
     auto likeBtn = createButton("GJ_longBtn03_001.png", "Most Liked", "GJ_sLikeIcon_001.png", 2, 0.6f);
-    likeBtn->setPosition({90.5f, 64.f});
+    likeBtn->setPosition({90.5f, 64.f + btnOffset});
     likeBtn->setID("most-liked"_spr);
 
     auto recentBtn = createButton("GJ_longBtn03_001.png", "Recent", "GJ_sRecentIcon_001.png", 4, 0.5f);
-    recentBtn->setPosition({-90.5f, 28.f});
+    recentBtn->setPosition({-90.5f, 28.f + btnOffset});
     recentBtn->setID("recent"_spr);
 
     auto followedBtn = createButton("GJ_longBtn03_001.png", "Followed", "GJ_sFollowedIcon_001.png", 12, 0.5f);
     followedBtn->setID("followed"_spr);
-    followedBtn->setPosition({90.5f, 28.f});
+    followedBtn->setPosition({90.5f, 28.f + btnOffset});
 
     auto featuredBtn = createButton("GJ_longBtn03_001.png", "Featured", "GJ_sStarsIcon_001.png", 6, 0.5f);
-    featuredBtn->setPosition({-90.5f, -8.f});
+    featuredBtn->setPosition({-90.5f, -8.f + btnOffset});
     featuredBtn->setID("recent"_spr);
 
     auto friendsBtn = createButton("GJ_longBtn03_001.png", "Friends", "GJ_sFriendsIcon_001.png", 13, 0.5f);
-    friendsBtn->setPosition({90.5f, -8.f});
+    friendsBtn->setPosition({90.5f, -8.f + btnOffset});
     friendsBtn->setID("friends"_spr);
-
-    //filters
-    auto filtersBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
-    filtersBg->setContentSize({365,50});
-    filtersBg->setColor({0,46,117});
-    filtersBg->setPosition({winSize.width / 2, (winSize.height / 2) - 77});
-    filtersBg->setID("filters-bg"_spr);
-    addChild(filtersBg, -1);
-
-    auto filtersTitle = CCLabelBMFont::create("Filters", "bigFont.fnt");
-    filtersTitle->setPosition((winSize.width / 2), (winSize.height / 2) - 37);
-    filtersTitle->setScale(.5f);
-    filtersTitle->setID("filters-title"_spr);
-    addChild(filtersTitle);
 
     //search
     auto searchBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
@@ -150,6 +141,23 @@ bool ListsSearchLayer::init() {
     m_textNode->setPosition({winSize.width / 2 - 73 - 101, (winSize.height / 2) + 130});
     addChild(m_textNode);
     
+    //filters
+    auto filtersBg = cocos2d::extension::CCScale9Sprite::create("square02b_001.png", { 0.0f, 0.0f, 80.0f, 80.0f });
+    filtersBg->setContentSize({365,97});
+    filtersBg->setColor({0,36,91});
+    filtersBg->setPosition({winSize.width / 2, (winSize.height / 2) - 24 - 73});
+    filtersBg->setID("filters-bg"_spr);
+    addChild(filtersBg, -1);
+
+    auto filtersTitle = CCLabelBMFont::create("Filters", "bigFont.fnt");
+    filtersTitle->setPosition((winSize.width / 2), (winSize.height / 2) - 37);
+    filtersTitle->setScale(.5f);
+    filtersTitle->setID("filters-title"_spr);
+    //filtersTitle->setVisible(false);
+    addChild(filtersTitle);
+
+    renderFilters();
+    
     //corners
     auto cornerBL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     cornerBL->setPosition({0,0});
@@ -166,12 +174,47 @@ bool ListsSearchLayer::init() {
     
 }
 
+void ListsSearchLayer::renderFilters() {
+    if(m_filterMenu) m_filterMenu->removeFromParentAndCleanup(true);
+
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
+
+    //difficulties
+    m_filterMenu = CCMenu::create();
+    for(int i = -1; i <= 10; i++) {
+        auto diffSprite = CCSprite::createWithSpriteFrameName(getDifficultyIcon(i).c_str());
+        diffSprite->setScale(.8f);
+        auto diffBtn = CCMenuItemSpriteExtra::create(
+            diffSprite,
+            this,
+            menu_selector(ListsSearchLayer::onDifficulty)
+        );
+        diffBtn->setTag(i);
+        if(m_diff != i) diffBtn->setColor({125,125,125});
+        m_filterMenu->addChild(diffBtn);
+    }
+
+    m_filterMenu->setContentSize({342,89});
+    m_filterMenu->setLayout(RowLayout::create()->setGrowCrossAxis(true)->setCrossAxisOverflow(true)->setGap(13.f)->setAutoScale(false));
+    m_filterMenu->updateLayout();
+    m_filterMenu->setPosition({winSize.width / 2, (winSize.height / 2) - 24 - 73});
+    m_filterMenu->setID("filters-menu"_spr);
+    addChild(m_filterMenu);
+}
+
 void ListsSearchLayer::keyBackClicked() {
     CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
 }
 
 void ListsSearchLayer::onBack(CCObject* object) {
     keyBackClicked();
+}
+
+void ListsSearchLayer::onDifficulty(CCObject* object) {
+    if(m_diff == object->getTag()) m_diff = -2;
+    else m_diff = object->getTag();
+
+    renderFilters();
 }
 
 void ListsSearchLayer::onSearch(CCObject* object) {    
