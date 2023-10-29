@@ -106,7 +106,9 @@ void ListCell::loadFromWrapper(CCNode* wrapper) {
     diamond->setScale(.325f);
     this->m_mainLayer->addChild(diamond);
     auto menu = CCMenu::create();
-    auto similarButton = createButton(menu, "View", menu_selector(ListCell::onView), 28, -132, 40.f, 25.f, 0.5f);
+    menu->setPosition(0,0);
+    menu->setAnchorPoint({0,0});
+    auto similarButton = createButton(menu, "View", menu_selector(ListCell::onView), 315, 28, 40.f, 25.f, 0.5f);
     m_mainLayer->addChild(menu);
 
 
