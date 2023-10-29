@@ -54,8 +54,8 @@ bool ListInfoLayer::init(List list) {
     addChild(cornerBR, -1);
 
     //buttons
-    auto menu = CCMenu::create();
-    addChild(menu);
+    m_menu = CCMenu::create();
+    addChild(m_menu);
 
     /*
         GJ_updateBtn_001.png
@@ -72,7 +72,7 @@ bool ListInfoLayer::init(List list) {
         menu_selector(ListInfoLayer::onBack)
     );
     sInfoBtn->setPosition({- (winSize.width / 2) + 25, - (winSize.height / 2) + 25});
-    menu->addChild(sInfoBtn);
+    m_menu->addChild(sInfoBtn);
 
     auto refreshSprite = CCSprite::createWithSpriteFrameName("GJ_updateBtn_001.png");
     refreshSprite->setScale(0.9f);
@@ -82,7 +82,7 @@ bool ListInfoLayer::init(List list) {
         menu_selector(ListInfoLayer::onRefresh)
     );
     refreshBtn->setPosition({+ (winSize.width / 2) - 26, + (winSize.height / 2) - 26});
-    menu->addChild(refreshBtn);
+    m_menu->addChild(refreshBtn);
 
     auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoBtn_001.png");
     infoSprite->setScale(0.9f);
@@ -92,17 +92,9 @@ bool ListInfoLayer::init(List list) {
         menu_selector(ListInfoLayer::onInfo)
     );
     infoBtn->setPosition({+ (winSize.width / 2) - 26, + (winSize.height / 2) - 71});
-    menu->addChild(infoBtn);
+    m_menu->addChild(infoBtn);
 
-    auto likeSprite = CCSprite::createWithSpriteFrameName("GJ_like2Btn_001.png");
-    likeSprite->setScale(0.9f);
-    auto likeBtn = CCMenuItemSpriteExtra::create(
-        likeSprite,
-        this,
-        menu_selector(ListInfoLayer::onLike)
-    );
-    likeBtn->setPosition({+ (winSize.width / 2) - 26, + (winSize.height / 2) - 116});
-    menu->addChild(likeBtn);
+    reloadMetadata();
 
     //top header
     auto diffSprite = CCSprite::createWithSpriteFrameName(getDifficultyIcon(m_list.m_difficulty).c_str());
@@ -126,27 +118,6 @@ bool ListInfoLayer::init(List list) {
     userName->setPosition((winSize.width / 2) - 140 + ((title->getContentSize().width) * title->getScaleX()) + 7.f, (winSize.height / 2) + 140);
     userName->limitLabelWidth(70, .8f, .35f);
     addChild(userName);
-
-    //dl and likes
-    auto numberSprite = CCSprite::createWithSpriteFrameName("GJ_downloadsIcon_001.png");
-    numberSprite->setPosition({25, winSize.height - 70});
-    numberSprite->setScale(.9f);
-    addChild(numberSprite);
-
-    auto number = CCLabelBMFont::create(std::to_string(m_list.m_downloads).c_str(), "bigFont.fnt");
-    number->setPosition({25, winSize.height - 70 - 20});
-    number->setScale(.4f);
-    addChild(number);
-
-    auto likesSprite = CCSprite::createWithSpriteFrameName("GJ_likesIcon_001.png");
-    likesSprite->setPosition({25, winSize.height - 70 - 50});
-    likesSprite->setScale(.9f);
-    addChild(likesSprite);
-
-    auto likesText = CCLabelBMFont::create(std::to_string(m_list.m_likes).c_str(), "bigFont.fnt");
-    likesText->setPosition({25, winSize.height - 70 - 70});
-    likesText->setScale(.4f);
-    addChild(likesText);
 
     renderList();
     setupProgressBars();
@@ -225,6 +196,52 @@ void ListInfoLayer::setupProgressBars() {
     progress->setTextureRect(progressRect);
 }
 
+void ListInfoLayer::reloadMetadata() {
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
+    auto hasLiked = GameLevelManager::sharedState()->hasLikedItemFullCheck((LikeItemType) 4, m_list.m_id, 0);
+
+    //like btn
+    if(m_likeBtn) m_likeBtn->removeFromParentAndCleanup(true);
+
+    auto likeSprite = CCSprite::createWithSpriteFrameName(hasLiked ? "GJ_like2Btn2_001.png" : "GJ_like2Btn_001.png");
+    likeSprite->setScale(0.9f);
+    m_likeBtn = CCMenuItemSpriteExtra::create(
+        likeSprite,
+        this,
+        menu_selector(ListInfoLayer::onLike)
+    );
+    m_likeBtn->setPosition({+ (winSize.width / 2) - 26, + (winSize.height / 2) - 116});
+    m_menu->addChild(m_likeBtn);
+
+    if(hasLiked) m_likeBtn->setEnabled(false);
+
+    //dl and likes
+    if(m_downloadsIcon) m_downloadsIcon->removeFromParentAndCleanup(true);
+    if(m_downloadsText) m_downloadsText->removeFromParentAndCleanup(true);
+    if(m_likesIcon) m_likesIcon->removeFromParentAndCleanup(true);
+    if(m_likesText) m_likesText->removeFromParentAndCleanup(true);
+
+    m_downloadsIcon = CCSprite::createWithSpriteFrameName("GJ_downloadsIcon_001.png");
+    m_downloadsIcon->setPosition({25, winSize.height - 70});
+    m_downloadsIcon->setScale(.9f);
+    addChild(m_downloadsIcon);
+
+    m_downloadsText = CCLabelBMFont::create(std::to_string(m_list.m_downloads).c_str(), "bigFont.fnt");
+    m_downloadsText->setPosition({25, winSize.height - 70 - 20});
+    m_downloadsText->setScale(.4f);
+    addChild(m_downloadsText);
+
+    m_likesIcon = CCSprite::createWithSpriteFrameName(m_list.m_likes < 0 ? "GJ_dislikesIcon_001.png" : "GJ_likesIcon_001.png");
+    m_likesIcon->setPosition({25, winSize.height - 70 - 50 + (m_list.m_likes < 0 ? 4 : 0)});
+    m_likesIcon->setScale(.9f);
+    addChild(m_likesIcon);
+
+    m_likesText = CCLabelBMFont::create(std::to_string(m_list.m_likes).c_str(), "bigFont.fnt");
+    m_likesText->setPosition({25, winSize.height - 70 - 70});
+    m_likesText->setScale(.4f);
+    addChild(m_likesText);
+}
+
 void ListInfoLayer::keyBackClicked() {
     CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
 }
@@ -242,7 +259,9 @@ void ListInfoLayer::onInfo(CCObject* listect) {
 }
 
 void ListInfoLayer::onLike(CCObject* listect) {
-    LikeItemLayer::create((LikeItemType) 4, m_list.m_id, 0)->show();
+    auto layer = LikeItemLayer::create((LikeItemType) 4, m_list.m_id, 0);
+    layer->m_likeDelegate = this;
+    layer->show();
 }
 
 CCScene* ListInfoLayer::scene(List list) {
@@ -262,3 +281,8 @@ void ListInfoLayer::loadListFinished(cocos2d::CCArray* levels, const char*) {
 
 void ListInfoLayer::loadListFailed(const char*) {}
 void ListInfoLayer::setupPageInfo(gd::string, const char*) {}
+
+void ListInfoLayer::likedItem(LikeItemType type, int id, bool liked) {
+    liked ? m_list.m_likes += 1 : m_list.m_likes -= 1;
+    reloadMetadata();
+}
