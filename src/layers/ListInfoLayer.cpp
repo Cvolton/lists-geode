@@ -97,27 +97,36 @@ bool ListInfoLayer::init(List list) {
     reloadMetadata();
 
     //top header
-    auto diffSprite = CCSprite::createWithSpriteFrameName(getDifficultyIcon(m_list.m_difficulty).c_str());
-    diffSprite->setPosition({(winSize.width / 2) - 160, (winSize.height / 2) + 140});
-    diffSprite->setScale(0.8f);
-    diffSprite->setZOrder(1);
-    addChild(diffSprite);
+    auto node = CCNode::create();
+    addChild(node);
 
     /*CCRect diffSpriteRect = diffSprite->getTextureRect();
     diffSpriteRect.size.height -= 12;
     diffSprite->setTextureRect(diffSpriteRect);*/
 
+    auto diffSprite = CCSprite::createWithSpriteFrameName(getDifficultyIcon(m_list.m_difficulty).c_str());
+    //diffSprite->setPosition({(winSize.width / 2) - 160, (winSize.height / 2) + 140});
+    diffSprite->setScale(0.8f);
+    //diffSprite->setZOrder(1);
+    node->addChild(diffSprite);
+
     auto title = CCLabelBMFont::create(m_list.m_name.c_str(), "bigFont.fnt");
     title->setAnchorPoint({ 0.0f, .5f });
-    title->setPosition({(winSize.width / 2) - 140, (winSize.height / 2) + 140});
+    //title->setPosition({(winSize.width / 2) - 140, (winSize.height / 2) + 140});
     title->limitLabelWidth(240, .8, .3f);
-    addChild(title);
+    node->addChild(title);
 
     auto userName = CCLabelBMFont::create(fmt::format("{}", m_list.m_userName).c_str(), "goldFont.fnt");
     userName->setAnchorPoint({ 0.0f, .5f });
     userName->setPosition((winSize.width / 2) - 140 + ((title->getContentSize().width) * title->getScaleX()) + 7.f, (winSize.height / 2) + 140);
     userName->limitLabelWidth(70, .8f, .35f);
-    addChild(userName);
+    node->addChild(userName);
+    
+    node->setContentSize({400,30});
+    node->setAnchorPoint({0.5,0.5});
+    node->setPosition(winSize.width / 2, (winSize.height) - 20);
+    node->setLayout(RowLayout::create()->setAutoScale(false)->setGrowCrossAxis(false)->setCrossAxisOverflow(true)->setGap(10.f));
+    node->updateLayout();
 
     renderList();
     setupProgressBars();
