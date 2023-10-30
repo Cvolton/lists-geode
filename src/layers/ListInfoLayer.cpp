@@ -193,7 +193,7 @@ void ListInfoLayer::setupProgressBars() {
     auto progress = CCSprite::create("GJ_progressBar_001.png");
     progress->setColor({0x47,0xaa,0xe8});
     //progress->setColor({0,255,0});
-    progress->setScaleX(0.92f);
+    progress->setScaleX(0.985f);
     progress->setScaleY(0.860f);
     progress->setOpacity(255);
     bar->addChild(progress);
