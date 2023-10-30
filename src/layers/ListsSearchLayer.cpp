@@ -33,6 +33,9 @@ CCMenuItemSpriteExtra* ListsSearchLayer::createButton(const char* texture, const
 
 bool ListsSearchLayer::init() {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
+
+    auto diff = Mod::get()->getSavedValue<int>("difficulty");
+    if(diff) m_diff = diff;
     
     auto backgroundSprite = CCSprite::create("GJ_gradientBG.png");
     auto size = backgroundSprite->getContentSize();
@@ -227,6 +230,8 @@ void ListsSearchLayer::onBack(CCObject* object) {
 void ListsSearchLayer::onDifficulty(CCObject* object) {
     if(m_diff == object->getTag()) m_diff = -4;
     else m_diff = object->getTag();
+
+    Mod::get()->setSavedValue("difficulty", m_diff);
 
     renderFilters();
 }
