@@ -12,10 +12,10 @@
     },
 	"settings": {
         "disclaimer": {
-            "name": "Disable disclaimer",
-            "description": "Disable disclaimer upon opening lists menu",
+            "name": "Show disclaimer",
+            "description": "Show disclaimer upon opening lists menu",
             "type": "bool",
-            "default": false
+            "default": true
         },
         "alt-profilepage": {
             "name": "Change profile lists button location",

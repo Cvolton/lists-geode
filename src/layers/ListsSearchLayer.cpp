@@ -199,6 +199,13 @@ bool ListsSearchLayer::init() {
     moreFilters->addChild(plusBtn);
 
     addChild(moreFilters);
+
+    //disclaimer
+    if(Mod::get()->getSettingValue<bool>("disclaimer")) {
+        auto disclaimer = FLAlertLayer::create(nullptr, "Disclaimer", "The lists displayed by this mod contain testing data created by RobTop. While these are real lists from 2.2, this doesn't mean that everyone who has made a list has access to this version. <cr>Some people who have created lists do NOT have 2.2</c>. Please do not go out of your way to harass any of these users about any 2.2-related inquiries. You can disable this disclaimer in the mod settings.", "OK", nullptr, 360);
+        disclaimer->m_scene = this;
+        disclaimer->show();
+    }
     
     return true;
     
