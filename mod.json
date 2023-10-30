@@ -9,5 +9,19 @@
         "sprites": [
             "resources/*.png"
         ]
+    },
+	"settings": {
+        "disclaimer": {
+            "name": "Disable disclaimer",
+            "description": "Disable disclaimer upon opening lists menu",
+            "type": "bool",
+            "default": false
+        },
+        "alt-profilepage": {
+            "name": "Change profile lists button location",
+            "description": "Shows the lists button above the \"My Levels\" button instead of next to it",
+            "type": "bool",
+            "default": false
+        }
     }
 }
