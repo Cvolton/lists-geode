@@ -135,6 +135,7 @@ void ListsViewLayer::loadLists() {
     m_counter->setVisible(false);
     renderList();
 
+    if(m_circle) m_circle->fadeAndRemove();
     m_circle = LoadingCircle::create();
     m_circle->setParentLayer(this);
     m_circle->show();
