@@ -12,6 +12,7 @@ class ListCell : public GenericListCell {
         
         void draw() override;
         void onView(cocos2d::CCObject* sender);
+        void onMore(cocos2d::CCObject* sender);
     
     public:
         ListCell(const char* name, cocos2d::CCSize size);

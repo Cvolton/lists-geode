@@ -45,10 +45,18 @@ void ListCell::loadFromWrapper(CCNode* wrapper) {
     this->m_mainLayer->addChild(title);
 
     auto userName = CCLabelBMFont::create(fmt::format("By {}", m_list.m_userName).c_str(), "goldFont.fnt");
-    userName->setAnchorPoint({ 0.0f, .5f });
-    userName->setPosition(43.0f + ((title->getContentSize().width) * title->getScaleX()) + 7.f, 42.f);
     userName->limitLabelWidth(50, .5f, .35f);
-    this->m_mainLayer->addChild(userName);
+
+    auto userNameBtn = CCMenuItemSpriteExtra::create(
+        userName,
+        this,
+        menu_selector(ListCell::onMore)
+    );
+
+    auto userNameMenu = CCMenu::create();
+    userNameMenu->addChild(userNameBtn);
+    userNameMenu->setPosition(43.0f + ((title->getContentSize().width) * title->getScaleX()) + 7.f + ((userName->getContentSize().width * userName->getScaleX()) / 2), 42.f);
+    this->m_mainLayer->addChild(userNameMenu);
 
     //progress bar
     auto bar = CCSprite::create("GJ_progressBar_001.png");
@@ -135,11 +143,13 @@ ListCell* ListCell::create(const char* key, CCSize size) {
 }
 
 void ListCell::onView(CCObject* sender){
-    //auto searchObject = GJSearchObject::create(SearchType::ListsOnClick, m_list.m_levels);
-    //auto browserLayer = LevelBrowserLayer::scene(searchObject);
     auto browserLayer = ListInfoLayer::scene(m_list);
 
     auto transitionFade = CCTransitionFade::create(0.5, browserLayer);
 
     CCDirector::sharedDirector()->pushScene(transitionFade);
+}
+
+void ListCell::onMore(CCObject* sender){
+    ProfilePage::create(m_list.m_accountID, false)->show();
 }

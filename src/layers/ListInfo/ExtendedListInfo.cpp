@@ -30,8 +30,7 @@ void ExtendedListInfo::onCopyName(cocos2d::CCObject* sender)
 
 void ExtendedListInfo::onCopyAuthor(cocos2d::CCObject* sender)
 {
-    utils::clipboard::write(m_list.m_userName);
-    Notification::create("Copied to Clipboard")->show();
+    ProfilePage::create(m_list.m_accountID, false)->show();
 }
 
 void ExtendedListInfo::onCopyDesc(cocos2d::CCObject* sender)

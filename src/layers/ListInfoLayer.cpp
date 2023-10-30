@@ -97,7 +97,7 @@ bool ListInfoLayer::init(List list) {
     reloadMetadata();
 
     //top header
-    auto node = CCNode::create();
+    auto node = CCMenu::create();
     addChild(node);
 
     /*CCRect diffSpriteRect = diffSprite->getTextureRect();
@@ -118,9 +118,14 @@ bool ListInfoLayer::init(List list) {
 
     auto userName = CCLabelBMFont::create(fmt::format("{}", m_list.m_userName).c_str(), "goldFont.fnt");
     userName->setAnchorPoint({ 0.0f, .5f });
-    userName->setPosition((winSize.width / 2) - 140 + ((title->getContentSize().width) * title->getScaleX()) + 7.f, (winSize.height / 2) + 140);
+    //userName->setPosition((winSize.width / 2) - 140 + ((title->getContentSize().width) * title->getScaleX()) + 7.f, (winSize.height / 2) + 140);
     userName->limitLabelWidth(70, .8f, .35f);
-    node->addChild(userName);
+    auto userNameBtn = CCMenuItemSpriteExtra::create(
+        userName,
+        this,
+        menu_selector(ListInfoLayer::onMore)
+    );
+    node->addChild(userNameBtn);
     
     node->setContentSize({400,30});
     node->setAnchorPoint({0.5,0.5});
@@ -271,6 +276,10 @@ void ListInfoLayer::onLike(CCObject* listect) {
     auto layer = LikeItemLayer::create((LikeItemType) 4, m_list.m_id, 0);
     layer->m_likeDelegate = this;
     layer->show();
+}
+
+void ListInfoLayer::onMore(CCObject* listect) {
+    ProfilePage::create(m_list.m_accountID, false)->show();
 }
 
 CCScene* ListInfoLayer::scene(List list) {

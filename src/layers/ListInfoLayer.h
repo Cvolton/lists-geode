@@ -31,6 +31,7 @@ protected:
     void onRefresh(cocos2d::CCObject*);
     void onInfo(cocos2d::CCObject*);
     void onLike(cocos2d::CCObject*);
+    void onMore(cocos2d::CCObject*);
 public:
     static ListInfoLayer* create(List list);
     static cocos2d::CCScene* scene(List list);
