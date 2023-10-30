@@ -4,7 +4,7 @@
 
 using namespace geode::prelude;
 
-class ListsSearchLayer : public cocos2d::CCLayer {
+class ListsSearchLayer : public cocos2d::CCLayer, public FLAlertLayerProtocol {
     CCMenu* m_menu = nullptr;
     CCMenu* m_filterMenu = nullptr;
     CCTextInputNode* m_textNode = nullptr;
@@ -25,4 +25,6 @@ protected:
 public:
     static ListsSearchLayer* create();
     static cocos2d::CCScene* scene();
+
+    void FLAlert_Clicked(FLAlertLayer*, bool);
 };

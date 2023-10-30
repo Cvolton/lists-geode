@@ -255,7 +255,7 @@ void ListsSearchLayer::onBack(CCObject* object) {
 }
 
 void ListsSearchLayer::onReset(CCObject* object) {
-    keyBackClicked();
+    FLAlertLayer::create(this, "Clear Filters", "Do you want to <cr>reset</c> all search <cy>filters</c>?", "NO", "YES", 300)->show();
 }
 
 void ListsSearchLayer::onAdditional(CCObject* object) {
@@ -290,4 +290,13 @@ CCScene* ListsSearchLayer::scene() {
     auto scene = CCScene::create();
     scene->addChild(layer);
     return scene;
+}
+
+void ListsSearchLayer::FLAlert_Clicked(FLAlertLayer*, bool btn) {
+    if(btn) {
+        Mod::get()->setSavedValue("star", false);
+        Mod::get()->setSavedValue("difficulty", 0);
+        m_diff = -4;
+        renderFilters();
+    }
 }
