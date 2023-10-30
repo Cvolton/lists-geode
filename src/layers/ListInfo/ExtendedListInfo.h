@@ -3,7 +3,7 @@
 
 using namespace geode::prelude;
 
-#include "CvoltonAlertLayerStub.h"
+#include "../include/CvoltonAlertLayerStub.h"
 #include "../../objects/list.hpp"
 
 class ExtendedListInfo : public CvoltonAlertLayerStub {
