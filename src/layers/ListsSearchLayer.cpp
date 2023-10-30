@@ -1,5 +1,6 @@
 #include "ListsSearchLayer.h"
 #include "ListsViewLayer.h"
+#include "ListSearch/MoreListSearchOptions.h"
 #include "../objects/ListSearchObject.hpp"
 #include "../utils.hpp"
 
@@ -172,6 +173,32 @@ bool ListsSearchLayer::init() {
     cornerBR->setAnchorPoint({0,0});
     cornerBR->setRotation(270);
     addChild(cornerBR, -1);
+
+    //more filters menu
+    auto moreFilters = CCMenu::create();
+    moreFilters->setPosition({winSize.width, winSize.height});
+
+    auto resetSpr = CCSprite::createWithSpriteFrameName("GJ_closeBtn_001.png");
+    resetSpr->setScale(0.8f);
+    auto resetBtn = CCMenuItemSpriteExtra::create(
+        resetSpr,
+        this,
+        menu_selector(ListsSearchLayer::onReset)
+    );
+    resetBtn->setPosition({-25, -25});
+    moreFilters->addChild(resetBtn);
+    
+    auto plusSpr = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");
+    plusSpr->setScale(0.8f);
+    auto plusBtn = CCMenuItemSpriteExtra::create(
+        plusSpr,
+        this,
+        menu_selector(ListsSearchLayer::onAdditional)
+    );
+    plusBtn->setPosition({-25, -75});
+    moreFilters->addChild(plusBtn);
+
+    addChild(moreFilters);
     
     return true;
     
@@ -227,6 +254,14 @@ void ListsSearchLayer::onBack(CCObject* object) {
     keyBackClicked();
 }
 
+void ListsSearchLayer::onReset(CCObject* object) {
+    keyBackClicked();
+}
+
+void ListsSearchLayer::onAdditional(CCObject* object) {
+    MoreListSearchOptions::create()->show();
+}
+
 void ListsSearchLayer::onDifficulty(CCObject* object) {
     if(m_diff == object->getTag()) m_diff = -4;
     else m_diff = object->getTag();
@@ -241,6 +276,7 @@ void ListsSearchLayer::onSearch(CCObject* object) {
     obj.m_type = object->getTag();
     if(obj.m_type == 0 || obj.m_type == 5) obj.m_str = m_textNode->getString();
     if(m_diff != -4) obj.m_diff = m_diff;
+    obj.m_star = Mod::get()->getSavedValue<bool>("star");
 
     auto browserLayer = ListsViewLayer::scene(obj);
 

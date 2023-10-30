@@ -20,6 +20,8 @@ protected:
     void onBack(cocos2d::CCObject*);
     void onSearch(cocos2d::CCObject*);
     void onDifficulty(cocos2d::CCObject*);
+    void onReset(cocos2d::CCObject*);
+    void onAdditional(cocos2d::CCObject*);
 public:
     static ListsSearchLayer* create();
     static cocos2d::CCScene* scene();
