@@ -32,6 +32,28 @@ void ListsViewLayer::responseToVector(const std::string& response){
     }
 }
 
+void ListsViewLayer::storeUsernames(const std::string& response){
+    std::stringstream responseStream(response);
+    std::string currentKey;
+
+    while(getline(responseStream, currentKey, '|')){
+        std::stringstream keyStream(currentKey);
+        std::string currentPart;
+        try {
+            getline(keyStream, currentPart, ':');
+            int userID = std::stoi(currentPart);
+            getline(keyStream, currentPart, ':');
+            std::string userName = currentPart;
+            getline(keyStream, currentPart, ':');
+            int accountID = std::stoi(currentPart);
+
+            GameLevelManager::sharedState()->storeUserName(userID, accountID, userName);
+        } catch(std::exception e) {
+            log::error("failed to parse username: {}", e.what());
+        }
+    }
+}
+
 void ListsViewLayer::parsePageData(const std::string& response) {
     std::stringstream responseStream(response);
     std::string currentKey;
@@ -161,6 +183,8 @@ void ListsViewLayer::loadLists() {
             renderList();
 
             getline(responseStream, part, '#'); //user data
+            storeUsernames(part);
+
             getline(responseStream, part, '#'); //page data
             parsePageData(part);
 

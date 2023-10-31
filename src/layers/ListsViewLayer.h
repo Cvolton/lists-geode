@@ -25,6 +25,7 @@ protected:
 
     std::unordered_map<int, std::string> responseToMap(const std::string& response);
     void responseToVector(const std::string& response);
+    void storeUsernames(const std::string& response);
     void parsePageData(const std::string& response);
 
     virtual bool init(ListSearchObject obj);
