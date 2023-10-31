@@ -55,7 +55,7 @@ class $modify(ListsProfilePage, ProfilePage) {
 	void loadPageFromUserInfo(GJUserScore* score) {
 		ProfilePage::loadPageFromUserInfo(score);
 
-		auto listsBtnSpr = AccountButtonSprite::createWithSpriteFrameName("geode.loader/changelog.png", 1.f);
+		auto listsBtnSpr = AccountButtonSprite::createWithSprite("lists_icon.png"_spr, 1.f, AccountBaseColor::Purple);
 		listsBtnSpr->setScale(.75f);
 
 		auto listsBtn = CCMenuItemSpriteExtra::create(
