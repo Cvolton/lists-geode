@@ -64,6 +64,7 @@ class $modify(ListsProfilePage, ProfilePage) {
 		auto listsBtn = CCMenuItemSpriteExtra::create(
             listsBtnSpr, this, menu_selector(ListsProfilePage::onLists)
         );
+		listsBtn->setID("my-lists"_spr);
 		m_buttonMenu->addChild(listsBtn);
 		this->m_buttons->addObject(listsBtn);
 
