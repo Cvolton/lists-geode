@@ -56,6 +56,8 @@ class $modify(ListsProfilePage, ProfilePage) {
 	void loadPageFromUserInfo(GJUserScore* score) {
 		ProfilePage::loadPageFromUserInfo(score);
 
+		if(score->m_accountID == GJAccountManager::sharedState()->m_accountID) return;
+
 		auto listsBtnSpr = AccountButtonSprite::createWithSprite("lists_icon.png"_spr, 1.f, AccountBaseColor::Purple);
 		listsBtnSpr->setScale(.75f);
 
