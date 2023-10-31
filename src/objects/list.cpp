@@ -18,8 +18,6 @@ List::List(std::unordered_map<int, std::string> parsedResponse) {
 	m_levels = parsedResponse[51];
 	m_uploaded = std::stoi(parsedResponse[28]);
 	m_updated = std::stoi(parsedResponse[29]);
-
-	log::info("Creating list: {}", m_name);
 }
 
 std::vector<int> List::getLevelIDs() const {

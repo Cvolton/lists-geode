@@ -28,7 +28,6 @@ void ListsViewLayer::responseToVector(const std::string& response){
 
     while(getline(responseStream, currentKey, '|')){
         auto list = List(responseToMap(currentKey));
-        log::info("Pushing to vector list: {}", list.m_name);
         m_lists.push_back(list);
     }
 }
@@ -181,7 +180,6 @@ void ListsViewLayer::renderList() {
 
     CCArray* displayedLevels = CCArray::create();
     for(auto& list : m_lists) {
-        log::info("Adding list: {}", list.m_name);
         auto node = CCNode::create();
         node->setUserData(&list);
         displayedLevels->addObject(node);
