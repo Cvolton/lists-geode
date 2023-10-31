@@ -104,11 +104,20 @@ bool ListInfoLayer::init(List list) {
     diffSpriteRect.size.height -= 12;
     diffSprite->setTextureRect(diffSpriteRect);*/
 
-    auto diffSprite = CCSprite::createWithSpriteFrameName(getDifficultyIcon(m_list.m_difficulty).c_str());
+    auto diffSprite = CCSprite::createWithSpriteFrameName(Mod::get()->expandSpriteName(getDifficultyIcon(m_list.m_difficulty).c_str()));
     //diffSprite->setPosition({(winSize.width / 2) - 160, (winSize.height / 2) + 140});
     diffSprite->setScale(0.8f);
     //diffSprite->setZOrder(1);
     node->addChild(diffSprite);
+
+    if(m_list.m_featuredIdx) {
+        auto featureSprite = CCSprite::createWithSpriteFrameName("GJ_featuredCoin_001.png");
+        featureSprite->setScale(1.f);
+        featureSprite->setZOrder(-1);
+        featureSprite->setPosition({diffSprite->getContentSize().width / 2, 0.f});
+        featureSprite->setAnchorPoint({0.5, 0.325});
+        diffSprite->addChild(featureSprite);
+    }
 
     auto title = CCLabelBMFont::create(m_list.m_name.c_str(), "bigFont.fnt");
     title->setAnchorPoint({ 0.0f, .5f });

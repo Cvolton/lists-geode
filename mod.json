@@ -8,7 +8,12 @@
     "resources": {
         "sprites": [
             "resources/*.png"
-        ]
+        ],
+		"spritesheets": {
+            "Faces": [
+                "resources/faces/*.png"
+            ]
+        }
     },
 	"settings": {
         "disclaimer": {
