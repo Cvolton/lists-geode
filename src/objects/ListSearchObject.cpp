@@ -23,7 +23,7 @@ std::string ListSearchObject::postRequest() {
 	auto GM = GameManager::sharedState();
 	auto AM = GJAccountManager::sharedState();
 	SHA1 gjp2;
-	gjp2.update(fmt::format("{}mI29fmAnxgTs", AM->m_password));
+	gjp2.update(fmt::format("{}mI29fmAnxgTs", std::string(AM->m_password)));
 
-	return fmt::format("gameVersion=22&binaryVersion=40&gdw=0&uuid={}&udid={}&accountID={}&gjp2={}&type={}&str={}&diff={}&star={}&page={}&secret=Wmfd2893gb7{}", GM->m_playerUserID.value(), GM->m_playerUDID, AM->m_accountID, gjp2.final(), m_type, m_str, m_diff, m_star ? 1 : 0, m_page, typeSpecific.str());
+	return fmt::format("gameVersion=22&binaryVersion=40&gdw=0&uuid={}&udid={}&accountID={}&gjp2={}&type={}&str={}&diff={}&star={}&page={}&secret=Wmfd2893gb7{}", GM->m_playerUserID.value(), std::string(GM->m_playerUDID), AM->m_accountID, gjp2.final(), m_type, m_str, m_diff, m_star ? 1 : 0, m_page, typeSpecific.str());
 }
