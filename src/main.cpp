@@ -1,6 +1,7 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/CreatorLayer.hpp>
 #include <Geode/modify/ProfilePage.hpp>
+#include <Geode/utils/web.hpp>
 
 #include "layers/ListsSearchLayer.h"
 #include "layers/ListsViewLayer.h"
@@ -77,3 +78,17 @@ class $modify(ListsProfilePage, ProfilePage) {
 		}
 	}
 };
+
+$on_mod(Loaded) {
+	web::AsyncWebRequest().fetch(fmt::format("https://geometrydash.eu/mods/lists/_api/ping/?platform={}&version={}", GEODE_PLATFORM_NAME, Mod::get()->getVersion().toString(false))).json().then([](const json::Value& info){
+        auto notice = info.try_get("notice");
+        if(notice == std::nullopt) return;
+        
+        if(info["notice"].is_string()) {
+            auto alert = FLAlertLayer::create("Lists Mod", info["notice"].as_string(), "OK");
+            alert->show();
+        }
+    }).expect([](const std::string& error){
+        log::warn("Fetching important notices failed: {}", error);
+    });
+}
