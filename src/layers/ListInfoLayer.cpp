@@ -266,6 +266,7 @@ void ListInfoLayer::reloadMetadata() {
 }
 
 void ListInfoLayer::keyBackClicked() {
+    GameLevelManager::sharedState()->m_onlineListDelegate = nullptr;
     CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
 }
 
