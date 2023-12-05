@@ -14,6 +14,8 @@ struct List {
 	std::string m_levels;
 	int m_uploaded;
 	int m_updated;
+	int m_55;
+	int m_56;
 
 	List(std::unordered_map<int, std::string> parsedResponse);
 	List() = default;

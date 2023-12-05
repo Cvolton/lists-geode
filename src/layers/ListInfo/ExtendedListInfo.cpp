@@ -70,7 +70,9 @@ void ExtendedListInfo::refreshInfoTexts() {
     infoText << "\n<cj>Uploaded</c>: " << timeZeroIfNA(m_list.m_uploaded)
         << "\n<cj>Updated</c>: " << timeZeroIfNA(m_list.m_updated)
         //<< "\n<cy>Stars Requested</c>: " << m_level->m_starsRequested
-        << "\n<cg>Feature score</c>: " << zeroIfNA(m_list.m_featuredIdx);
+        << "\n<cg>Feature score</c>: " << zeroIfNA(m_list.m_featuredIdx)
+        << "\n<cy>Reward 1</c>: " << zeroIfNA(m_list.m_55)
+        << "\n<co>Reward 2</c>: " << zeroIfNA(m_list.m_56);
 
     m_primary = infoText.str();
 }
