@@ -118,8 +118,8 @@ bool ListsViewLayer::init(ListSearchObject obj) {
 
     auto cornerBR = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     cornerBR->setPosition({winSize.width,0});
-    cornerBR->setAnchorPoint({0,0});
-    cornerBR->setRotation(270);
+    cornerBR->setAnchorPoint({1,0});
+    cornerBR->setFlipX(true);
     addChild(cornerBR, -1);
 
     //page arrows
