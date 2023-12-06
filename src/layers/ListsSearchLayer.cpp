@@ -91,20 +91,24 @@ bool ListsSearchLayer::init() {
     likeBtn->setPosition({90.5f, 64.f + btnOffset});
     likeBtn->setID("most-liked"_spr);
 
-    auto recentBtn = createButton("GJ_longBtn03_001.png", "Recent", "GJ_sRecentIcon_001.png", 4, 0.5f);
-    recentBtn->setPosition({-90.5f, 28.f + btnOffset});
-    recentBtn->setID("recent"_spr);
+    auto featuredBtn = createButton("GJ_longBtn03_001.png", "Featured", "GJ_sBigStar_001.png"_spr, 6, 0.5f);
+    featuredBtn->setPosition({-90.5f, 28.f + btnOffset});
+    featuredBtn->setID("featured"_spr);
 
     auto followedBtn = createButton("GJ_longBtn03_001.png", "Followed", "GJ_sFollowedIcon_001.png", 12, 0.5f);
     followedBtn->setID("followed"_spr);
     followedBtn->setPosition({90.5f, 28.f + btnOffset});
 
-    auto featuredBtn = createButton("GJ_longBtn03_001.png", "Featured", "GJ_sStarsIcon_001.png", 6, 0.5f);
-    featuredBtn->setPosition({-90.5f, -8.f + btnOffset});
-    featuredBtn->setID("recent"_spr);
+    auto awardedBtn = createButton("GJ_longBtn04_001.png", "Awarded", "GJ_sStarsIcon_001.png", 11, 0.5f);
+    awardedBtn->setPosition({-118.5f, -8.f + btnOffset});
+    awardedBtn->setID("awarded"_spr);
 
-    auto friendsBtn = createButton("GJ_longBtn03_001.png", "Friends", "GJ_sFriendsIcon_001.png", 13, 0.5f);
-    friendsBtn->setPosition({90.5f, -8.f + btnOffset});
+    auto recentBtn = createButton("GJ_longBtn04_001.png", "Recent", "GJ_sRecentIcon_001.png", 4, 0.5f);
+    recentBtn->setPosition({0.f, -8.f + btnOffset});
+    recentBtn->setID("recent"_spr);
+
+    auto friendsBtn = createButton("GJ_longBtn04_001.png", "Friends", "GJ_sFriendsIcon_001.png", 13, 0.5f);
+    friendsBtn->setPosition({117.5f, -8.f + btnOffset});
     friendsBtn->setID("friends"_spr);
 
     //search
@@ -133,6 +137,7 @@ bool ListsSearchLayer::init() {
     );
     searchBtn->setTag(5);
     searchBtn->setPosition(156.f, 130.f);
+    searchBtn->setID("user-search"_spr);
     m_menu->addChild(searchBtn);
 
     m_textNode = CCTextInputNode::create(194, 50, "Enter a list, list ID or account ID", "bigFont.fnt");
@@ -166,12 +171,14 @@ bool ListsSearchLayer::init() {
     auto cornerBL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     cornerBL->setPosition({0,0});
     cornerBL->setAnchorPoint({0,0});
+    cornerBL->setID("left-corner"_spr);
     addChild(cornerBL, -1);
 
     auto cornerBR = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     cornerBR->setPosition({winSize.width,0});
-    cornerBR->setAnchorPoint({0,0});
-    cornerBR->setRotation(270);
+    cornerBR->setAnchorPoint({1,0});
+    cornerBR->setFlipX(true);
+    cornerBR->setID("right-corner"_spr);
     addChild(cornerBR, -1);
 
     //more filters menu
