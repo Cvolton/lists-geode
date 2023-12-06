@@ -45,6 +45,7 @@ bool ListsSearchLayer::init() {
     backgroundSprite->setAnchorPoint({0, 0});
     backgroundSprite->setColor({0, 102, 255});
     backgroundSprite->setZOrder(-2);
+    backgroundSprite->setID("background"_spr);
     addChild(backgroundSprite);
 
     auto backBtn = CCMenuItemSpriteExtra::create(
@@ -52,10 +53,12 @@ bool ListsSearchLayer::init() {
         this,
         menu_selector(ListsSearchLayer::onBack)
     );
+    backBtn->setID("exit-button"_spr);
 
     auto menuBack = CCMenu::create();
     menuBack->addChild(backBtn);
     menuBack->setPosition({25, winSize.height - 25});
+    menuBack->setID("exit-menu"_spr);
 
     addChild(menuBack);
 
@@ -148,6 +151,7 @@ bool ListsSearchLayer::init() {
     m_textNode->m_textField->setAnchorPoint({ .0f, .5f });
     m_textNode->m_placeholderLabel->setAnchorPoint({ .0f, .5f });
     m_textNode->setPosition({winSize.width / 2 - 73 - 101, (winSize.height / 2) + 130});
+    m_textNode->setID("search-bar"_spr);
     addChild(m_textNode);
     
     //filters
@@ -184,6 +188,7 @@ bool ListsSearchLayer::init() {
     //more filters menu
     auto moreFilters = CCMenu::create();
     moreFilters->setPosition({winSize.width, winSize.height});
+    moreFilters->setID("other-filter-menu"_spr);
 
     auto resetSpr = CCSprite::createWithSpriteFrameName("GJ_closeBtn_001.png");
     resetSpr->setScale(0.8f);
@@ -193,6 +198,7 @@ bool ListsSearchLayer::init() {
         menu_selector(ListsSearchLayer::onReset)
     );
     resetBtn->setPosition({-25, -25});
+    resetBtn->setID("clear-filters-button"_spr);
     moreFilters->addChild(resetBtn);
     
     auto plusSpr = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");
@@ -203,6 +209,7 @@ bool ListsSearchLayer::init() {
         menu_selector(ListsSearchLayer::onAdditional)
     );
     plusBtn->setPosition({-25, -75});
+    plusBtn->setID("advanced-filters-button"_spr);
     moreFilters->addChild(plusBtn);
 
     addChild(moreFilters);

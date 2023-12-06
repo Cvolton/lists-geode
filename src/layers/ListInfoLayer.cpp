@@ -27,6 +27,7 @@ bool ListInfoLayer::init(List list) {
     backgroundSprite->setAnchorPoint({0, 0});
     backgroundSprite->setColor({0, 102, 255});
     backgroundSprite->setZOrder(-2);
+    backgroundSprite->setID("background"_spr);
     addChild(backgroundSprite);
 
     auto backBtn = CCMenuItemSpriteExtra::create(
@@ -34,10 +35,12 @@ bool ListInfoLayer::init(List list) {
         this,
         menu_selector(ListInfoLayer::onBack)
     );
+    backBtn->setID("exit-button"_spr);
 
     auto menuBack = CCMenu::create();
     menuBack->addChild(backBtn);
     menuBack->setPosition({25, winSize.height - 25});
+    menuBack->setID("exit-menu"_spr);
 
     addChild(menuBack);
 
@@ -45,16 +48,19 @@ bool ListInfoLayer::init(List list) {
     auto cornerBL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     cornerBL->setPosition({0,0});
     cornerBL->setAnchorPoint({0,0});
+    cornerBL->setID("left-corner"_spr);
     addChild(cornerBL, -1);
 
     auto cornerBR = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     cornerBR->setPosition({winSize.width,0});
     cornerBR->setAnchorPoint({1,0});
     cornerBR->setFlipX(true);
+    cornerBR->setID("right-corner"_spr);
     addChild(cornerBR, -1);
 
     //buttons
     m_menu = CCMenu::create();
+    m_menu->setID("right-side-menu"_spr);
     addChild(m_menu);
 
     /*
@@ -72,6 +78,7 @@ bool ListInfoLayer::init(List list) {
         menu_selector(ListInfoLayer::onBack)
     );
     sInfoBtn->setPosition({- (winSize.width / 2) + 25, - (winSize.height / 2) + 25});
+    sInfoBtn->setID("small-info-button"_spr);
     m_menu->addChild(sInfoBtn);
 
     auto refreshSprite = CCSprite::createWithSpriteFrameName("GJ_updateBtn_001.png");
@@ -82,6 +89,7 @@ bool ListInfoLayer::init(List list) {
         menu_selector(ListInfoLayer::onRefresh)
     );
     refreshBtn->setPosition({+ (winSize.width / 2) - 26, + (winSize.height / 2) - 26});
+    refreshBtn->setID("refresh-button"_spr);
     m_menu->addChild(refreshBtn);
 
     auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoBtn_001.png");
@@ -92,12 +100,14 @@ bool ListInfoLayer::init(List list) {
         menu_selector(ListInfoLayer::onInfo)
     );
     infoBtn->setPosition({+ (winSize.width / 2) - 26, + (winSize.height / 2) - 71});
+    infoBtn->setID("info-button"_spr);
     m_menu->addChild(infoBtn);
 
     reloadMetadata();
 
     //top header
     auto node = CCMenu::create();
+    node->setID("top-menu"_spr);
     addChild(node);
 
     /*CCRect diffSpriteRect = diffSprite->getTextureRect();
@@ -107,6 +117,7 @@ bool ListInfoLayer::init(List list) {
     auto diffSprite = CCSprite::createWithSpriteFrameName(Mod::get()->expandSpriteName(getDifficultyIcon(m_list.m_difficulty).c_str()));
     //diffSprite->setPosition({(winSize.width / 2) - 160, (winSize.height / 2) + 140});
     diffSprite->setScale(0.8f);
+    diffSprite->setID("difficulty"_spr);
     //diffSprite->setZOrder(1);
     node->addChild(diffSprite);
 
@@ -116,6 +127,7 @@ bool ListInfoLayer::init(List list) {
         featureSprite->setZOrder(-1);
         featureSprite->setPosition({diffSprite->getContentSize().width / 2, 0.f});
         featureSprite->setAnchorPoint({0.5, 0.325});
+        featureSprite->setID("featured-coin"_spr);
         diffSprite->addChild(featureSprite);
     }
 
@@ -123,17 +135,20 @@ bool ListInfoLayer::init(List list) {
     title->setAnchorPoint({ 0.0f, .5f });
     //title->setPosition({(winSize.width / 2) - 140, (winSize.height / 2) + 140});
     title->limitLabelWidth(240, .8, .3f);
+    title->setID("title-label"_spr);
     node->addChild(title);
 
     auto userName = CCLabelBMFont::create(fmt::format("{}", m_list.m_userName).c_str(), "goldFont.fnt");
     userName->setAnchorPoint({ 0.0f, .5f });
     //userName->setPosition((winSize.width / 2) - 140 + ((title->getContentSize().width) * title->getScaleX()) + 7.f, (winSize.height / 2) + 140);
     userName->limitLabelWidth(70, .8f, .35f);
+    userName->setID("username-label"_spr);
     auto userNameBtn = CCMenuItemSpriteExtra::create(
         userName,
         this,
         menu_selector(ListInfoLayer::onMore)
     );
+    userNameBtn->setID("username-button"_spr);
     node->addChild(userNameBtn);
     
     node->setContentSize({400,30});
@@ -192,6 +207,7 @@ void ListInfoLayer::setupProgressBars() {
     bar->setColor({0, 0, 0});
     bar->setOpacity(125);
     bar->setZOrder(1);
+    bar->setID("progress-bar"_spr);
 
     addChild(bar);
 
@@ -202,6 +218,7 @@ void ListInfoLayer::setupProgressBars() {
     status->limitLabelWidth(170, .7f, .3f);
     status->setScale(0.5f);
     status->setZOrder(2);
+    status->setID("status"_spr);
     addChild(status);
 
     auto progress = CCSprite::create("GJ_progressBar_001.png");
@@ -213,6 +230,7 @@ void ListInfoLayer::setupProgressBars() {
     bar->addChild(progress);
     progress->setAnchorPoint({0.f,0.5f});
     progress->setPosition({2.5f, 10.f});
+    progress->setID("progress-bar-internal"_spr);
 
     CCRect progressRect = progress->getTextureRect();
     progressRect.size.width *= size;
@@ -234,6 +252,7 @@ void ListInfoLayer::reloadMetadata() {
         menu_selector(ListInfoLayer::onLike)
     );
     m_likeBtn->setPosition({+ (winSize.width / 2) - 26, + (winSize.height / 2) - 116});
+    m_likeBtn->setID("like-button"_spr);
     m_menu->addChild(m_likeBtn);
 
     if(hasLiked) m_likeBtn->setEnabled(false);
@@ -247,21 +266,25 @@ void ListInfoLayer::reloadMetadata() {
     m_downloadsIcon = CCSprite::createWithSpriteFrameName("GJ_downloadsIcon_001.png");
     m_downloadsIcon->setPosition({25, winSize.height - 70});
     m_downloadsIcon->setScale(.9f);
+    m_downloadsIcon->setID("downloads-icon"_spr);
     addChild(m_downloadsIcon);
 
     m_downloadsText = CCLabelBMFont::create(std::to_string(m_list.m_downloads).c_str(), "bigFont.fnt");
     m_downloadsText->setPosition({25, winSize.height - 70 - 20});
     m_downloadsText->setScale(.4f);
+    m_downloadsText->setID("downloads-label"_spr);
     addChild(m_downloadsText);
 
     m_likesIcon = CCSprite::createWithSpriteFrameName(m_list.m_likes < 0 ? "GJ_dislikesIcon_001.png" : "GJ_likesIcon_001.png");
     m_likesIcon->setPosition({25, winSize.height - 70 - 50 + (m_list.m_likes < 0 ? 4 : 0)});
     m_likesIcon->setScale(.9f);
+    m_likesIcon->setID("likes-icon"_spr);
     addChild(m_likesIcon);
 
     m_likesText = CCLabelBMFont::create(std::to_string(m_list.m_likes).c_str(), "bigFont.fnt");
     m_likesText->setPosition({25, winSize.height - 70 - 70});
     m_likesText->setScale(.4f);
+    m_likesText->setID("likes-label"_spr);
     addChild(m_likesText);
 }
 

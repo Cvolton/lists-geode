@@ -30,11 +30,13 @@ void ListCell::loadFromWrapper(CCNode* wrapper) {
     diffSprite->setPosition({22.f, 28.f});
     diffSprite->setScale(0.8f);
     diffSprite->setZOrder(1);
+    diffSprite->setID("difficulty"_spr);
     this->m_mainLayer->addChild(diffSprite);
 
     auto featureSprite = CCSprite::createWithSpriteFrameName("GJ_featuredCoin_001.png");
     featureSprite->setPosition({22.f, 28.f});
     featureSprite->setScale(0.8f);
+    featureSprite->setID("featured-coin"_spr);
     this->m_mainLayer->addChild(featureSprite);
     featureSprite->setVisible(m_list.m_featuredIdx > 0);
 
@@ -42,21 +44,25 @@ void ListCell::loadFromWrapper(CCNode* wrapper) {
     title->setAnchorPoint({ 0.0f, .5f });
     title->setPosition(43.0f, 42.f);
     title->limitLabelWidth(170, .625f, .3f);
+    title->setID("title-label"_spr);
     this->m_mainLayer->addChild(title);
 
     auto userName = CCLabelBMFont::create(fmt::format("By {}", m_list.m_userName).c_str(), "goldFont.fnt");
     userName->limitLabelWidth(50, .5f, .35f);
+    title->setID("username-label"_spr);
 
     auto userNameBtn = CCMenuItemSpriteExtra::create(
         userName,
         this,
         menu_selector(ListCell::onMore)
     );
+    userNameBtn->setID("username-button"_spr);
 
     auto userNameMenu = CCMenu::create();
     userNameMenu->addChild(userNameBtn);
     userNameMenu->setPosition(43.0f + ((title->getContentSize().width) * title->getScaleX()) + 7.f + ((userName->getContentSize().width * userName->getScaleX()) / 2), 42.f);
     this->m_mainLayer->addChild(userNameMenu);
+    userNameMenu->setID("username-menu"_spr);
 
     //progress bar
     auto bar = CCSprite::create("GJ_progressBar_001.png");
@@ -64,6 +70,7 @@ void ListCell::loadFromWrapper(CCNode* wrapper) {
     bar->setPosition({147.f, 23.5f});
     bar->setColor({0, 0, 0});
     bar->setOpacity(125);
+    bar->setID("progress-bar"_spr);
 
     this->m_mainLayer->addChild(bar);
 
@@ -73,6 +80,7 @@ void ListCell::loadFromWrapper(CCNode* wrapper) {
     status->setPosition({147.f, 24.5f});
     status->limitLabelWidth(170, .7f, .3f);
     status->setScale(0.5f);
+    status->setID("status-label"_spr);
     this->m_mainLayer->addChild(status);
 
     auto progress = CCSprite::create("GJ_progressBar_001.png");
@@ -84,6 +92,7 @@ void ListCell::loadFromWrapper(CCNode* wrapper) {
     bar->addChild(progress);
     progress->setAnchorPoint({0.f,0.5f});
     progress->setPosition({2.5f, 10.f});
+    progress->setID("progress-bar-internal"_spr);
 
     CCRect progressRect = progress->getTextureRect();
     progressRect.size.width *= size;
@@ -94,29 +103,36 @@ void ListCell::loadFromWrapper(CCNode* wrapper) {
     numberSprite->setPosition({44, 9});
     numberSprite->setAnchorPoint({0, 0.5f});
     numberSprite->setScale(0.7f);
+    numberSprite->setID("downloads-icon"_spr);
     this->m_mainLayer->addChild(numberSprite);
 
     auto number = CCLabelBMFont::create(std::to_string(m_list.m_downloads).c_str(), "bigFont.fnt");
     number->setAnchorPoint({ 0.0f, 0.5f });
     number->setPosition(55.5f, 10.0f);
     number->setScale(.325f);
+    number->setID("downloads-label"_spr);
     this->m_mainLayer->addChild(number);
 
     auto diamondSprite = CCSprite::createWithSpriteFrameName(m_list.m_likes < 0 ? "GJ_dislikesIcon_001.png" : "GJ_likesIcon_001.png");
     diamondSprite->setPosition({number->getPositionX() + ((number->getContentSize().width) * number->getScaleX()) + 5, 10});
     diamondSprite->setAnchorPoint({0, 0.5f});
     diamondSprite->setScale(0.45f);
+    diamondSprite->setID("likes-icon"_spr);
     this->m_mainLayer->addChild(diamondSprite);
 
     auto diamond = CCLabelBMFont::create(std::to_string(m_list.m_likes).c_str(), "bigFont.fnt");
     diamond->setAnchorPoint({ 0.0f, 0.5f });
     diamond->setPosition(diamondSprite->getPositionX() + 13.f, 10.0f);
     diamond->setScale(.325f);
+    diamond->setID("likes-label"_spr);
     this->m_mainLayer->addChild(diamond);
+
     auto menu = CCMenu::create();
     menu->setPosition(0,0);
     menu->setAnchorPoint({0,0});
+    menu->setID("view-menu"_spr);
     auto similarButton = createButton(menu, "View", menu_selector(ListCell::onView), 315, 28, 40.f, 25.f, 0.5f);
+    similarButton->setID("view-button"_spr);
     m_mainLayer->addChild(menu);
 
 

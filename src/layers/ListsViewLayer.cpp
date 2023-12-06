@@ -89,6 +89,7 @@ bool ListsViewLayer::init(ListSearchObject obj) {
     backgroundSprite->setAnchorPoint({0, 0});
     backgroundSprite->setColor({0, 102, 255});
     backgroundSprite->setZOrder(-2);
+    backgroundSprite->setID("background"_spr);
     addChild(backgroundSprite);
 
     auto backBtn = CCMenuItemSpriteExtra::create(
@@ -96,10 +97,12 @@ bool ListsViewLayer::init(ListSearchObject obj) {
         this,
         menu_selector(ListsViewLayer::onBack)
     );
+    backBtn->setID("exit-button"_spr);
 
     auto menuBack = CCMenu::create();
     menuBack->addChild(backBtn);
     menuBack->setPosition({25, winSize.height - 25});
+    menuBack->setID("exit-menu"_spr);
 
     addChild(menuBack);
 
@@ -108,22 +111,26 @@ bool ListsViewLayer::init(ListSearchObject obj) {
     m_counter->setAnchorPoint({ 1.f, 1.f });
     m_counter->setPosition(winSize - CCPoint(7,3));
     m_counter->setScale(0.5f);
+    m_counter->setID("counter"_spr);
     addChild(m_counter);
 
     //corners
     auto cornerBL = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     cornerBL->setPosition({0,0});
     cornerBL->setAnchorPoint({0,0});
+    cornerBL->setID("left-corner"_spr);
     addChild(cornerBL, -1);
 
     auto cornerBR = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     cornerBR->setPosition({winSize.width,0});
     cornerBR->setAnchorPoint({1,0});
     cornerBR->setFlipX(true);
+    cornerBR->setID("right-corner"_spr);
     addChild(cornerBR, -1);
 
     //page arrows
     auto menu = CCMenu::create();
+    menu->setID("page-menu"_spr);
     addChild(menu);
 
     auto prevSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_03_001.png");
@@ -133,6 +140,7 @@ bool ListsViewLayer::init(ListSearchObject obj) {
         menu_selector(ListsViewLayer::onPrev)
     );
     m_prevBtn->setPosition({- (winSize.width / 2) + 25, 0});
+    m_prevBtn->setID("prev-page-button"_spr);
     menu->addChild(m_prevBtn);
 
     auto nextSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_03_001.png");
@@ -143,6 +151,7 @@ bool ListsViewLayer::init(ListSearchObject obj) {
         menu_selector(ListsViewLayer::onNext)
     );
     m_nextBtn->setPosition({+ (winSize.width / 2) - 25, 0});
+    m_nextBtn->setID("next-page-button"_spr);
     menu->addChild(m_nextBtn);
 
     loadLists();
